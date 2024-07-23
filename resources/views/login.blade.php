@@ -56,7 +56,7 @@
                                         id="exampleInputPassword1" placeholder="Password" required>
                                 </div>
                                 <div class="mt-3 d-grid gap-2">
-                                    <button class="btn btn-block btn-primary btn-lg fw-medium auth-form-btn">SIGN IN</a>
+                                    <button class="btn btn-block btn-primary btn-lg fw-medium auth-form-btn">SIGN IN</button>
                                 </div>
                             </form>
                         </div>
