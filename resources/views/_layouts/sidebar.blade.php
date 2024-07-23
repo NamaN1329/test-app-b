@@ -1,6 +1,7 @@
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
+        @if(auth()->user()->role === 1)
         <li class="nav-item">
           <a class="nav-link" href="dashboard">
             <i class="mdi mdi-grid-large menu-icon"></i>
@@ -13,6 +14,7 @@
             <span class="menu-title">Manager</span>
           </a>
         </li>
+        @endif
         <li class="nav-item">
           <a class="nav-link" href="post">
             <i class="fa fa-plus-square menu-icon"></i>

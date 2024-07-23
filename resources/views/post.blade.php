@@ -1,5 +1,5 @@
 @extends('_layouts.app')
-@section('pageTitle', 'Manager')
+@section('pageTitle', 'Posts')
 
 @section('content')
     <div class="row">
@@ -17,48 +17,56 @@
                                     <button class="btn btn-primary btn-lg text-white mb-0 me-0" data-toggle="modal"
                                         data-target="#exampleModalCenter" type="button">
                                         <i class="mdi mdi-account-plus"></i>
-                                        Add new member
+                                        Add Posts
                                     </button>
                                     <!-- End button trigger modal -->
                                 </div>
                             </div>
                             <div class="table-responsive  mt-1">
-                                <table id="myTable" class="table">
+                                <table id="myTable" class="table table-striped table-bordered">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone Number</th>
+                                            <th>Title</th>
+                                            <th>Number</th>
+                                            <th>Amount</th>
+                                            <th>Notes</th>
+                                            <th>Added By</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $user)
+                                        @foreach ($posts as $post)
                                             <tr>
                                                 <td>
                                                     <div class="d-flex ">
                                                         <div>
-                                                            <h6>{{ $user->name }}</h6>
+                                                            <h6>{{ $post->postType->name . ' (' . $post->postType->schedule_time . ')' }}
+                                                            </h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <h6>{{ $user->email }}</h6>
+                                                    <h6>{{ $post->number }}</h6>
                                                 </td>
                                                 <td>
-                                                    <h6>{{ $user->phone_number }}</h6>
+                                                    <h6>{{ $post->amount }}</h6>
+                                                </td>
+                                                <td>
+                                                    <h6>{{ $post->notes }}</h6>
+                                                </td>
+                                                <td>
+                                                    <h6>{{ $post->addedBy->name }}</h6>
                                                 </td>
                                                 <td>
                                                     <button type="button" data-toggle="modal"
                                                         data-target="#editModalCenter" class="btn btn-warning"
-                                                        data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                                        data-email="{{ $user->email }}"
-                                                        data-phone_number="{{ $user->phone_number }}"
-                                                        data-password="{{ $user->password }}" onclick="getEditData(this)">
+                                                        data-id="{{ $post->id }}" data-title="{{ $post->title }}"
+                                                        data-amount="{{ $post->amount }}" data-notes="{{ $post->notes }}"
+                                                        data-number="{{ $post->number }}" onclick="getEditData(this)">
                                                         Edit
                                                     </button>
                                                     <button type="button" data-toggle="modal" class="btn btn-danger"
-                                                        data-id="{{ $user->id }}" onclick="getDeleteData(this)">
+                                                        data-id="{{ $post->id }}" onclick="getDeleteData(this)">
                                                         Delete
                                                     </button>
                                                 </td>
@@ -79,12 +87,12 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Add New Member</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add New Post</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form class="forms-sample" action="manager/add" method="POST">
+                <form class="forms-sample" action="post/add" method="POST">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 grid-margin stretch-card">
@@ -92,24 +100,30 @@
                                     <div class="card-body">
                                         <div class="form-group">
                                             @csrf
-                                            <label for="exampleInputUsername1">Name</label>
-                                            <input name="name" type="text" class="form-control"
-                                                id="exampleInputUsername1" placeholder="Enter new member name" required>
+                                            <label for="exampleInputTitle">Title</label>
+                                            <select class="form-control" id="exampleInputTitle" name="title" required>
+                                                <option value="">Select Title</option>
+                                                @foreach ($postTypes as $postType)
+                                                    <option value="{{ $postType->id }}">{{ $postType->name }}
+                                                        ({{ $postType->schedule_time }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Email address</label>
-                                            <input type="email" name="email" class="form-control"
-                                                id="exampleInputEmail1" placeholder="Enter email" required>
+                                            <label for="exampleInputNumber">Number</label>
+                                            <input type="number" name="number" class="form-control"
+                                                id="exampleInputNumber" placeholder="Enter number" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputPhoneNumber">Phone Number</label>
-                                            <input type="text" name="phone_number" class="form-control"
-                                                id="exampleInputPhoneNumber" placeholder="Enter phone number" required>
+                                            <label for="exampleInputAmount">Amount</label>
+                                            <input type="number" name="amount" class="form-control"
+                                                id="exampleInputAmount" placeholder="Enter amount" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputPassword1">Password</label>
-                                            <input type="password" name="password" class="form-control"
-                                                id="exampleInputPassword1" placeholder="Enter password" required>
+                                            <label for="exampleInputNotes">Notes</label>
+                                            <input type="text" name="notes" class="form-control"
+                                                id="exampleInputNotes" placeholder="Enter notes" required>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +151,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form class="forms-sample" action="manager/edit" method="POST">
+                <form class="forms-sample" action="post/edit" method="POST">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 grid-margin stretch-card">
@@ -145,25 +159,31 @@
                                     <div class="card-body">
                                         <div class="form-group">
                                             @csrf
-                                            <input name="id" type="hidden" id="editInputId">
-                                            <label for="editInputName">Name</label>
-                                            <input name="name" type="text" class="form-control" id="editInputName"
-                                                placeholder="Enter new member name" required>
+                                            <input type="hidden" id="editInputId" />
+                                            <label for="exampleInputUsername1">Title</label>
+                                            <select class="form-control" id="editInputTitle" name="title" required>
+                                                <option value="">Select Title</option>
+                                                @foreach ($postTypes as $postType)
+                                                    <option value="{{ $postType->id }}">{{ $postType->name }}
+                                                        ({{ $postType->schedule_time }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="editInputEmail">Email address</label>
-                                            <input type="email" name="email" class="form-control"
-                                                id="editInputEmail" placeholder="Enter email" required>
+                                            <label for="exampleInputEmail1">Number</label>
+                                            <input type="number" id="editInputNumber" name="number"
+                                                class="form-control" placeholder="Enter number" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="editInputPhoneNumber">Phone Number</label>
-                                            <input type="text" name="phone_number" class="form-control"
-                                                id="editInputPhoneNumber" placeholder="Enter phone number" required>
+                                            <label for="exampleInputEmail1">Amount</label>
+                                            <input type="number" id="editInputAmount" name="amount"
+                                                class="form-control" placeholder="Enter number" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="editInputPassword">Password</label>
-                                            <input type="password" name="password" class="form-control"
-                                                id="editInputPassword" placeholder="Enter password" required>
+                                            <label for="exampleInputPhoneNumber">Notes</label>
+                                            <input type="text" name="notes" class="form-control"
+                                                id="editInputNotes" placeholder="Enter notes" required>
                                         </div>
                                     </div>
                                 </div>
@@ -183,17 +203,14 @@
 <script>
     function getEditData(button) {
         const id = button.getAttribute('data-id');
-
-        document.getElementById('editInputEmail').value = button.getAttribute('data-email');
-        document.getElementById('editInputPhoneNumber').value = button.getAttribute('data-phone_number');
-        document.getElementById('editInputName').value = button.getAttribute('data-name');
-        document.getElementById('editInputPassword').value = button.getAttribute('data-password');
+        document.getElementById('editInputTitle').value = button.getAttribute('data-title');
+        document.getElementById('editInputNumber').value = button.getAttribute('data-number');
+        document.getElementById('editInputNotes').value = button.getAttribute('data-notes');
+        document.getElementById('editInputAmount').value = button.getAttribute('data-amount');
         document.getElementById('editInputId').value = id;
 
         var form = document.getElementById('editInputId').closest("form");
-        // Check if the form exists
         if (form) {
-            // Update the action attribute value
             form.action = form.action + `/` + id;
         } else {
             console.error('No parent form found.');
@@ -203,7 +220,7 @@
     function getDeleteData(button) {
         if (confirm('Are you sure you want to delete this user?')) {
             const id = button.getAttribute('data-id');
-            fetch(`manager/delete/${id}`, {
+            fetch(`post/delete/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

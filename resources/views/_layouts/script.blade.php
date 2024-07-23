@@ -29,4 +29,10 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
   </script>
   <!-- end bootstrap js -->
+  <!-- datatable js cdn -->
+  <script src="//cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
+  <!-- end datatable js cdn -->
+  <script>
+      let table = new DataTable('#myTable');
+  </script>
   <!-- End custom js for this page-->

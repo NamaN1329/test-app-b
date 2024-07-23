@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('post_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('title');
-            $table->tinyInteger('number');
-            $table->string('notes');
-            $table->double('amount');
-            $table->unsignedBigInteger('created_by');
+            $table->string('name');
+            $table->time('schedule_time');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('post_types');
     }
 };

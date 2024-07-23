@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Shared\PostController;
 use App\Http\Middleware\IsAuthenticate;
+use App\Http\Middleware\RedirectByRole;
 use App\Http\Middleware\RedirectIfAuthenticate;
 use GuzzleHttp\Promise\Is;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +21,8 @@ Route::get('/login', function () {
 Route::post('/login', [LoginController::class, 'login']);
 
 Route::group(['middleware' => [IsAuthenticate::class]], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('admin.dashboard')->middleware(RedirectByRole::class);
 
     Route::prefix('manager')->group(function () {
         Route::get('/', [ManagerController::class, 'index'])->name('admin.manager');
