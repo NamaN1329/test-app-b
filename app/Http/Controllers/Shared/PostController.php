@@ -16,12 +16,18 @@ class PostController extends Controller
     public function index()
     {
         if (Auth::user()->role === 1) {
-        $posts = Post::orderBy("created_at", "desc")->get();
+            $posts = Post::orderBy("created_at", "desc")->get();
         } else {
             $posts = Auth::user()->posts;
         }
         $postTypes = PostType::get();
         return view("post", compact(["posts", "postTypes"]));
+    }
+
+    public function show(PostType $postType)
+    {
+        $posts = $postType->posts()->orderBy("number", "desc")->get();
+        return response()->json(["data" => $posts]);
     }
 
     /**
@@ -36,7 +42,7 @@ class PostController extends Controller
 
         $post->save();
 
-        return redirect()->back()->with("success","Post added succesfully!");
+        return redirect()->back()->with("success", "Post added succesfully!");
     }
 
 
@@ -49,7 +55,7 @@ class PostController extends Controller
         $post->fill(["created_by" => Auth::user()->id]);
         $post->save();
 
-        return redirect()->back()->with("success","Post updated succesfully!");
+        return redirect()->back()->with("success", "Post updated succesfully!");
     }
 
     /**
@@ -58,6 +64,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return response()->json(["success"=> "User deleted successfully!"]);
+        return response()->json(["success" => "User deleted successfully!"]);
     }
 }

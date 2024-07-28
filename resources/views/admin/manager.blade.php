@@ -194,7 +194,7 @@
         // Check if the form exists
         if (form) {
             // Update the action attribute value
-            form.action = form.action + `/` + id;
+            form.action = `manager/edit/` + id;
         } else {
             console.error('No parent form found.');
         }

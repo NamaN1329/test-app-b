@@ -29,6 +29,7 @@
                                             <th>Title</th>
                                             <th>Number</th>
                                             <th>Amount</th>
+                                            <th>Date</th>
                                             <th>Notes</th>
                                             <th>Added By</th>
                                             <th>Action</th>
@@ -50,6 +51,9 @@
                                                 </td>
                                                 <td>
                                                     <h6>{{ $post->amount }}</h6>
+                                                </td>
+                                                <td>
+                                                    <h6>{{ $post->date }}</h6>
                                                 </td>
                                                 <td>
                                                     <h6>{{ $post->notes }}</h6>
@@ -82,7 +86,7 @@
             </div>
         </div>
     </div>
-    <!--Start Create member Modal -->
+    <!--Start Create post Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -122,7 +126,7 @@
                                         <div class="form-group">
                                             <label for="exampleInputNumber">Number</label>
                                             <input type="number" name="number" class="form-control"
-                                                id="exampleInputNumber" placeholder="Enter number" required>
+                                                id="exampleInputNumber" placeholder="Enter number" min="1" max="100" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputAmount">Amount</label>
@@ -147,9 +151,9 @@
             </div>
         </div>
     </div>
-    <!--End Create member Modal -->
+    <!--End Create post Modal -->
 
-    <!--Start Edit member Modal -->
+    <!--Start Edit post Modal -->
     <div class="modal fade" id="editModalCenter" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -190,7 +194,7 @@
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Number</label>
                                             <input type="number" id="editInputNumber" name="number"
-                                                class="form-control" placeholder="Enter number" required>
+                                                class="form-control" placeholder="Enter number" min="1" max="100" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Amount</label>
@@ -215,7 +219,7 @@
             </div>
         </div>
     </div>
-    <!--End Create member Modal -->
+    <!--End Create post Modal -->
 @endsection
 <script>
     function getEditData(button) {
@@ -229,7 +233,7 @@
 
         var form = document.getElementById('editInputId').closest("form");
         if (form) {
-            form.action = form.action + `/` + id;
+            form.action = `post/edit/` + id;
         } else {
             console.error('No parent form found.');
         }

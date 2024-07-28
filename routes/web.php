@@ -33,6 +33,7 @@ Route::group(['middleware' => [IsAuthenticate::class]], function () {
 
     Route::prefix('post')->group(function () {
         Route::get('/', [PostController::class, 'index'])->name('admin.post');
+        Route::get('/{postType}', [PostController::class, 'show'])->name('admin.post.show');
         Route::post('/add', [PostController::class, 'store'])->name('admin.storePost');
         Route::post('/edit/{post}', [PostController::class, 'update'])->name('admin.updatePost');
         Route::delete('/delete/{post}', [PostController::class, 'destroy'])->name('admin.deletePost');

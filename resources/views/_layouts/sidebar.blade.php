@@ -1,27 +1,36 @@
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
-      <ul class="nav">
-        @if(auth()->user()->role === 1)
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard">
-            <i class="mdi mdi-grid-large menu-icon"></i>
-            <span class="menu-title">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="manager">
-            <i class="fa fa-id-badge menu-icon"></i>
-            <span class="menu-title">Manager</span>
-          </a>
-        </li>
-        @endif
-        <li class="nav-item">
-          <a class="nav-link" href="post">
-            <i class="fa fa-plus-square menu-icon"></i>
-            <span class="menu-title">Posts</span>
-          </a>
-        </li>
-        {{-- <li class="nav-item nav-category">UI Elements</li>
+        <ul class="nav">
+            @if (auth()->user()->role === 1)
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard">
+                        <i class="mdi mdi-grid-large menu-icon"></i>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="manager">
+                        <i class="fa fa-id-badge menu-icon"></i>
+                        <span class="menu-title">Manager</span>
+                    </a>
+                </li>
+            @endif
+            <li class="nav-item">
+                <a class="nav-link" href="post">
+                    <i class="fa fa-plus-square menu-icon"></i>
+                    <span class="menu-title">Posts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <form action="logout" method="post">
+                    @csrf
+                    <button class="nav-link">
+                        <i class="fa fa-sign-out menu-icon"></i>
+                        <span class="menu-title">Logout</span>
+                    </button>
+                </form>
+            </li>
+            {{-- <li class="nav-item nav-category">UI Elements</li>
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
             <i class="menu-icon mdi mdi-floor-plan"></i>
@@ -106,5 +115,5 @@
             <span class="menu-title">Documentation</span>
           </a>
         </li> --}}
-      </ul>
+        </ul>
     </nav>

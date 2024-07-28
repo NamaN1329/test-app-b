@@ -19,12 +19,11 @@ class DashboardController extends Controller
         $postTypes = PostType::all();
 
         $currentTime = Carbon::now()->toTimeString();
-        $currentPostType = PostType::where("schedule_time", '>', $currentTime)->orderBy('schedule_time')->first();
 
-        $currentSlotTotalAmount = Post::select('title', DB::raw('SUM(amount) as total_amount'))
-            ->whereDate("date", Carbon::today())->groupBy('title')->get();
+        $slots = Post::select('title', DB::raw('SUM(amount) as total_amount'))
+            ->whereDate("date", Carbon::today())->groupBy('title')->with("postType")->get();
 
-        return view('admin/dashboard', compact('postTypes', 'currentSlotTotalAmount'));
+        return view('admin/dashboard', compact('slots'));
     }
 
     /**
