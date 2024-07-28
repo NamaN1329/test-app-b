@@ -62,7 +62,8 @@
                                                         data-target="#editModalCenter" class="btn btn-warning"
                                                         data-id="{{ $post->id }}" data-title="{{ $post->title }}"
                                                         data-amount="{{ $post->amount }}" data-notes="{{ $post->notes }}"
-                                                        data-number="{{ $post->number }}" onclick="getEditData(this)">
+                                                        data-number="{{ $post->number }}" data-date="{{ $post->date }}" 
+                                                        onclick="getEditData(this)">
                                                         Edit
                                                     </button>
                                                     <button type="button" data-toggle="modal" class="btn btn-danger"
@@ -109,6 +110,14 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputDate">Date</label>
+                                            <input type="date" name="date" class="form-control"
+                                                id="exampleInputDate" min="@php echo Date('Y-m-d'); @endphp" 
+                                                max="@php echo Date('Y-m-d', strtotime(' +1 day')) @endphp"
+                                                value="@php echo Date('Y-m-d'); @endphp"
+                                                placeholder="Select Date" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputNumber">Number</label>
@@ -160,7 +169,7 @@
                                         <div class="form-group">
                                             @csrf
                                             <input type="hidden" id="editInputId" />
-                                            <label for="exampleInputUsername1">Title</label>
+                                            <label for="editInputTitle">Title</label>
                                             <select class="form-control" id="editInputTitle" name="title" required>
                                                 <option value="">Select Title</option>
                                                 @foreach ($postTypes as $postType)
@@ -169,6 +178,14 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="editInputDate">Date</label>
+                                            <input type="date" name="date" class="form-control"
+                                                id="editInputDate" min="@php echo Date('Y-m-d'); @endphp" 
+                                                max="@php echo Date('Y-m-d', strtotime(' +1 day')) @endphp"
+                                                value="@php echo Date('Y-m-d'); @endphp"
+                                                placeholder="Select Date" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Number</label>
@@ -207,6 +224,7 @@
         document.getElementById('editInputNumber').value = button.getAttribute('data-number');
         document.getElementById('editInputNotes').value = button.getAttribute('data-notes');
         document.getElementById('editInputAmount').value = button.getAttribute('data-amount');
+        document.getElementById('editInputDate').value = button.getAttribute('data-date');
         document.getElementById('editInputId').value = id;
 
         var form = document.getElementById('editInputId').closest("form");

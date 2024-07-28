@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('title');
             $table->tinyInteger('number');
+            $table->date('date');
             $table->string('notes');
             $table->double('amount');
             $table->unsignedBigInteger('created_by');

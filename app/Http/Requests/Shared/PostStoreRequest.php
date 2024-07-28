@@ -25,6 +25,7 @@ class PostStoreRequest extends FormRequest
             "title"=> ["required","integer","exists:post_types,id"],
             "number" => ["required","integer","between:1,100"],
             "notes" => ["required","string"],
+            "date" => ["required","date"],
             "amount" => ["required","regex:/^\d+(\.\d{1,2})?$/"],
         ];
     }

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\PostType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PostTypeSeeder extends Seeder
@@ -43,16 +42,16 @@ class PostTypeSeeder extends Seeder
                 "schedule_time" => "15:00:00",
             ],
             [
-                "name" => "RAJKOT",
-                "schedule_time" => "19:00:00",
-            ],
-            [
                 "name" => "HINDUSTAN",
                 "schedule_time" => "16:45:00",
             ],
             [
                 "name" => "DEEPMALA",
                 "schedule_time" => "17:45:00",
+            ],
+            [
+                "name" => "RAJKOT",
+                "schedule_time" => "19:00:00",
             ],
         ];
         foreach ($postTypes as $postType) {

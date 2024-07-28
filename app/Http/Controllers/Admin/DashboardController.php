@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PostType;
+use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -12,7 +16,15 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin/dashboard');
+        $postTypes = PostType::all();
+
+        $currentTime = Carbon::now()->toTimeString();
+        $currentPostType = PostType::where("schedule_time", '>', $currentTime)->orderBy('schedule_time')->first();
+
+        $currentSlotTotalAmount = Post::select('title', DB::raw('SUM(amount) as total_amount'))
+            ->whereDate("date", Carbon::today())->groupBy('title')->get();
+
+        return view('admin/dashboard', compact('postTypes', 'currentSlotTotalAmount'));
     }
 
     /**
