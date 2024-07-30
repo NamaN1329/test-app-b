@@ -21,7 +21,7 @@ class PostController extends Controller
             $posts = Auth::user()->posts;
         }
         $postTypes = PostType::get();
-        return view("post", compact(["posts", "postTypes"]));
+        return view("shared/post", compact(["posts", "postTypes"]));
     }
 
     public function show(PostType $postType)

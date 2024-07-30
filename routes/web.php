@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Shared\PostController;
+use App\Http\Controllers\Shared\WinnerController;
 use App\Http\Middleware\IsAuthenticate;
 use App\Http\Middleware\RedirectByRole;
 use App\Http\Middleware\RedirectIfAuthenticate;
@@ -38,6 +39,8 @@ Route::group(['middleware' => [IsAuthenticate::class]], function () {
         Route::post('/edit/{post}', [PostController::class, 'update'])->name('admin.updatePost');
         Route::delete('/delete/{post}', [PostController::class, 'destroy'])->name('admin.deletePost');
     });
+
+    Route::get('winners', [WinnerController::class,'index'])->name('getWinner');
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });

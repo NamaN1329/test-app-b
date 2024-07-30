@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PostType;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,10 +15,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $postTypes = PostType::all();
-
-        $currentTime = Carbon::now()->toTimeString();
-
         $slots = Post::select('title', DB::raw('SUM(amount) as total_amount'))
             ->whereDate("date", Carbon::today())->groupBy('title')->with("postType")->get();
 
