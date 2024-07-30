@@ -18,7 +18,7 @@ class AutomaticSelectCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:automatic-select-command';
+    protected $signature = 'app:automatic-select-command {--date= : add custom date} {--time= : add custom time}';
 
     /**
      * The console command description.
@@ -27,15 +27,23 @@ class AutomaticSelectCommand extends Command
      */
     protected $description = 'Command description';
 
+    public $currentTime;
+
+    public $currentDate;
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
         $this->info('Start automatic select command');
+
+        $this->currentTime = $this->option('time') ?? Date::now()->format('H:i');
+        $this->currentDate = $this->option('date') ?? Date::now()->format('Y-m-d');
+
         $allPosts = $this->getCurrentSlotPosts();
 
-        if ($allPosts) {
+        if ($allPosts->count() > 0) {
             Log::info('retrive all the posts for current post type', ['allPosts' => $allPosts]);
             $numberSums = $allPosts->groupBy('number')
                 ->map(function (Collection $group) {
@@ -48,24 +56,38 @@ class AutomaticSelectCommand extends Command
 
             Log::info('retrive the selectedNumber', ['selectedNumber' => $selectedNumber]);
 
-            try {
-                DB::beginTransaction();
+            $postType = $allPosts->first()->title;
+            $today = Date::today()->format('Y-m-d');
+            $isWinnerExists = Winner::where(["post_type" => $postType, "date" => $today])->exists();
 
-                $winner = new Winner();
-                $winner->fill([
-                    'number' => $selectedNumber,
-                    'date' => Date::now()->format('Y-m-d'),
-                    'post_type' => $allPosts->first()->title,
-                ])->save();
+            if ($isWinnerExists) {
+                Log::warning(
+                    "Winner already declared",
+                    ["winner" => $isWinnerExists, "post_type" => $postType, "date" => $today]
+                );
 
-                Log::info('Winner data store successfully!', ['winner' => $winner]);
+                $this->info("Winner already declared");
+                return 0;
+            } else {
+                try {
+                    DB::beginTransaction();
 
-                DB::commit();
-            } catch (\Exception $e) {
-                Log::error('Error in Winner data store');
-                Log::error($e->getMessage());
+                    $winner = new Winner();
+                    $winner->fill([
+                        'number' => $selectedNumber,
+                        'date' => $this->currentDate,
+                        'post_type' => $allPosts->first()->title,
+                    ])->save();
 
-                DB::rollBack();
+                    Log::info('Winner data store successfully!', ['winner' => $winner]);
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    Log::error('Error in Winner data store');
+                    Log::error($e->getMessage());
+
+                    DB::rollBack();
+                }
             }
         }
 
@@ -74,14 +96,14 @@ class AutomaticSelectCommand extends Command
 
     public function getCurrentSlotPosts()
     {
-        $postTypes = PostType::whereTime('schedule_time', Date::now()->format('H:i'))->first();
+        $postTypes = PostType::whereTime('schedule_time', $this->currentTime)->first();
 
         if ($postTypes) {
             Log::info('retrive current time post Types', ['postTypes' => $postTypes]);
 
             return $postTypes->posts()
                 ->where('title', $postTypes->id)
-                ->whereDate('date', Date::now()->format('Y-m-d'))
+                ->whereDate('date', $this->currentDate)
                 ->get();
         }
 

@@ -22,7 +22,7 @@ Route::post('/login', [LoginController::class, 'login']);
 
 Route::group(['middleware' => [IsAuthenticate::class]], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('admin.dashboard')->middleware(RedirectByRole::class);
+        ->name('admin.dashboard')->middleware(RedirectByRole::class);
 
     Route::prefix('manager')->group(function () {
         Route::get('/', [ManagerController::class, 'index'])->name('admin.manager');
@@ -39,7 +39,10 @@ Route::group(['middleware' => [IsAuthenticate::class]], function () {
         Route::delete('/delete/{post}', [PostController::class, 'destroy'])->name('admin.deletePost');
     });
 
-    Route::get('winners', [WinnerController::class,'index'])->name('getWinner');
+    Route::prefix('winners')->group(function () {
+        Route::get('/', [WinnerController::class, 'index'])->name('getWinner');
+        Route::post('/store', [WinnerController::class, 'store'])->name('storeWinner');
+    });
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
