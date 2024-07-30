@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('winner', function (Blueprint $table) {
+        Schema::create('winners', function (Blueprint $table) {
             $table->id();
-            $table->integer('type');
+            $table->unsignedBigInteger('post_type');
+            $table->date('date');
             $table->tinyInteger('number');
             $table->boolean('is_mannual')->default(false);
             $table->unsignedBigInteger('created_by')->nullable();
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('winner');
+        Schema::dropIfExists('winners');
     }
 };

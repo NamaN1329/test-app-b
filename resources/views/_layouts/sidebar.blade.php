@@ -22,6 +22,12 @@
                 </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="winners">
+                  <i class="fa fa-trophy menu-icon"></i>
+                  <span class="menu-title">Winners</span>
+              </a>
+          </li>
+            <li class="nav-item">
                 <form action="logout" method="post">
                     @csrf
                     <button class="nav-link">
