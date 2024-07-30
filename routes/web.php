@@ -8,12 +8,11 @@ use App\Http\Controllers\Shared\WinnerController;
 use App\Http\Middleware\IsAuthenticate;
 use App\Http\Middleware\RedirectByRole;
 use App\Http\Middleware\RedirectIfAuthenticate;
-use GuzzleHttp\Promise\Is;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->middleware(RedirectIfAuthenticate::class, IsAuthenticate::class);
+});
 
 Route::get('/login', function () {
     return view('login');

@@ -94,7 +94,7 @@ class AutomaticSelectCommand extends Command
         $totalAmount = $amounts->sum();
         $payableAmount = $minAmount * 9;
 
-        if ((float)$payableAmount <= (float)$totalAmount / 2) {
+        if ((float)$payableAmount <= (float)$totalAmount * config('settings.profit.percent')) {
             return $amounts->search(function ($value) use ($minAmount) {
                 return $value === $minAmount;
             });
