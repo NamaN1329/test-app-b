@@ -5,14 +5,13 @@ use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Shared\PostController;
 use App\Http\Controllers\Shared\WinnerController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\IsAuthenticate;
 use App\Http\Middleware\RedirectByRole;
 use App\Http\Middleware\RedirectIfAuthenticate;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WelcomeController::class,'index'])->name('welcome');
 
 Route::get('/login', function () {
     return view('login');
