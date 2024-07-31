@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\PostType;
-use App\Models\Post;
 use App\Models\Winner;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -18,7 +17,7 @@ class AutomaticSelectCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:automatic-select-command';
+    protected $signature = 'app:automatic-select-command {--date= : add custom date} {--time= : add custom time}';
 
     /**
      * The console command description.
@@ -27,61 +26,101 @@ class AutomaticSelectCommand extends Command
      */
     protected $description = 'Command description';
 
+    public $currentTime;
+
+    public $currentDate;
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
         $this->info('Start automatic select command');
-        $allPosts = $this->getCurrentSlotPosts();
 
-        if ($allPosts) {
-            Log::info('retrive all the posts for current post type', ['allPosts' => $allPosts]);
-            $numberSums = $allPosts->groupBy('number')
-                ->map(function (Collection $group) {
-                    return $group->sum('amount');
-                });
+        $this->currentTime = $this->option('time') ?? Date::now()->format('H:i');
+        $this->currentDate = $this->option('date') ?? Date::now()->format('Y-m-d');
 
-            Log::info('retrive the numberSums', ['numberSums' => $numberSums]);
+        $postTypes = PostType::whereTime('schedule_time', $this->currentTime)->first();
 
-            $selectedNumber = $this->getWinningNumber($numberSums);
+        if ($postTypes?->exists() > 0) {
+            $isWinnerExists = Winner::where(["post_type" => $postTypes->id, "date" => $this->currentDate])->exists();
 
-            Log::info('retrive the selectedNumber', ['selectedNumber' => $selectedNumber]);
+            if ($isWinnerExists) {
+                Log::warning(
+                    "Winner already declared",
+                    ["winner" => $isWinnerExists, "post_type" => $postTypes->id, "date" => $this->currentDate]
+                );
 
-            try {
-                DB::beginTransaction();
+                $this->info("Winner already declared");
+                return 0;
+            }
+            $allPosts = $this->getCurrentSlotPosts($postTypes);
 
-                $winner = new Winner();
-                $winner->fill([
-                    'number' => $selectedNumber,
-                    'date' => Date::now()->format('Y-m-d'),
-                    'post_type' => $allPosts->first()->title,
-                ])->save();
+            if ($allPosts->count() > 0) {
+                Log::info('retrive all the posts for current post type', ['allPosts' => $allPosts]);
+                $numberSums = $allPosts->groupBy('number')
+                    ->map(function (Collection $group) {
+                        return $group->sum('amount');
+                    });
 
-                Log::info('Winner data store successfully!', ['winner' => $winner]);
+                Log::info('retrive the numberSums', ['numberSums' => $numberSums]);
 
-                DB::commit();
-            } catch (\Exception $e) {
-                Log::error('Error in Winner data store');
-                Log::error($e->getMessage());
+                $selectedNumber = $this->getWinningNumber($numberSums);
 
-                DB::rollBack();
+                Log::info('retrive the selectedNumber', ['selectedNumber' => $selectedNumber]);
+                try {
+                    DB::beginTransaction();
+
+                    $winner = new Winner();
+                    $winner->fill([
+                        'number' => $selectedNumber,
+                        'date' => $this->currentDate,
+                        'post_type' => $allPosts->first()->title,
+                    ])->save();
+
+                    Log::info('Winner data store successfully!', ['winner' => $winner]);
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    Log::error('Error in Winner data store');
+                    Log::error($e->getMessage());
+
+                    DB::rollBack();
+                }
+            } else {
+                try {
+                    DB::beginTransaction();
+
+                    $winner = new Winner();
+                    $winner->fill([
+                        'number' => rand(1, 100),
+                        'date' => $this->currentDate,
+                        'post_type' => $postTypes->id,
+                    ])->save();
+
+                    Log::info('Winner data store successfully!', ['winner' => $winner]);
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    Log::error('Error in Winner data store');
+                    Log::error($e->getMessage());
+
+                    DB::rollBack();
+                }
             }
         }
 
         $this->info('End automatic select command');
     }
 
-    public function getCurrentSlotPosts()
+    public function getCurrentSlotPosts($postTypes)
     {
-        $postTypes = PostType::whereTime('schedule_time', Date::now()->format('H:i'))->first();
-
         if ($postTypes) {
             Log::info('retrive current time post Types', ['postTypes' => $postTypes]);
 
             return $postTypes->posts()
                 ->where('title', $postTypes->id)
-                ->whereDate('date', Date::now()->format('Y-m-d'))
+                ->whereDate('date', $this->currentDate)
                 ->get();
         }
 

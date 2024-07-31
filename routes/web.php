@@ -5,14 +5,13 @@ use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Shared\PostController;
 use App\Http\Controllers\Shared\WinnerController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\IsAuthenticate;
 use App\Http\Middleware\RedirectByRole;
 use App\Http\Middleware\RedirectIfAuthenticate;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WelcomeController::class,'index'])->name('welcome');
 
 Route::get('/login', function () {
     return view('login');
@@ -22,7 +21,7 @@ Route::post('/login', [LoginController::class, 'login']);
 
 Route::group(['middleware' => [IsAuthenticate::class]], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('admin.dashboard')->middleware(RedirectByRole::class);
+        ->name('admin.dashboard')->middleware(RedirectByRole::class);
 
     Route::prefix('manager')->group(function () {
         Route::get('/', [ManagerController::class, 'index'])->name('admin.manager');
@@ -39,7 +38,10 @@ Route::group(['middleware' => [IsAuthenticate::class]], function () {
         Route::delete('/delete/{post}', [PostController::class, 'destroy'])->name('admin.deletePost');
     });
 
-    Route::get('winners', [WinnerController::class,'index'])->name('getWinner');
+    Route::prefix('winners')->group(function () {
+        Route::get('/', [WinnerController::class, 'index'])->name('getWinner');
+        Route::post('/store', [WinnerController::class, 'store'])->name('storeWinner');
+    });
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
