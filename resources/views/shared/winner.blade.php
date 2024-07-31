@@ -95,7 +95,9 @@
                                             <th>Title</th>
                                             <th>Date</th>
                                             <th>Number</th>
-                                            <th>Mannual</th>
+                                            @if (auth()->user()->role === 1)
+                                                <th>Mannual</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
