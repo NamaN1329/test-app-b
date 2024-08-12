@@ -1483,7 +1483,7 @@
                         <font
                             style="color:rgb(255, 217, 0); text-shadow: 1px 1px rgb(255, 0, 0);font-size:50px;border-radius: 25px;font-weight: bold;">
                             <b>
-                                <center>CHAR MINAR</center>
+                                <center>UK SUPER (08:30PM)</center>
                             </b>
                         </font>
                         <font
@@ -1504,10 +1504,10 @@
                             <table width="100%" class="rtable" style="border:1px thin; text-align:center"
                                 cellpadding="0" cellspacing="0" border="1" align="center">
                                 <tr>
-                                    <td widht="10" style="background-color:#c5e31b;"><strong
+                                    <td widht="10%" style="background-color:#c5e31b;"><strong
                                             class="fon">Date</strong></td>
                                     @foreach ($postTypes as $postType)
-                                        <td width="10%"
+                                        <td width="50%"
                                             style=" border-color: #000; background-color: #c5e31b; color: #a90f0f; font-size: 15px; font-weight: bold;">
                                             {{ $postType->name }} ({{ $postType->schedule_time }})</td>
                                     @endforeach
