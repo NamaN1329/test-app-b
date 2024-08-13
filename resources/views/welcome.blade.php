@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Lucky Bazar <?php echo Date('d/m/Y'); ?></title>
+    <title>SATTA Lucky Bazar <?php echo Date('d/m/Y'); ?></title>
     <meta name="Description"
         content="satta lucky bazar result 30/07/2024, Satta King 2024-2022, satta king up, disawar, satta matta, satta king chart, delhi satta, satta king.com, satta chart, gali satta, black satta king, sata king com, gali desawar result" />
     <meta name="Keywords"
@@ -1489,7 +1489,7 @@
                         <font
                             style="color:rgb(208, 8, 18); text-shadow: 1px 1px rgb(255, 221, 0);font-size:55px;border-radius: 25px;font-weight: bold;">
                             <b>
-                                <center>---</center>
+                                <center>WAIT...</center>
                             </b>
                         </font>
                     </table>
