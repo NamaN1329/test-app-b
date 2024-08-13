@@ -1437,7 +1437,7 @@
 
         <font color="#DFFF00" size="4">
             @php
-                $date = new DateTime('2024-07-30');
+                $date = new DateTime();
 
                 // Get the day of the month with ordinal suffix
                 $day = $date->format('jS');
