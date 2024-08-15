@@ -1480,7 +1480,7 @@
                         <font
                             style="color:rgb(208, 8, 18); text-shadow: 1px 1px rgb(255, 221, 0);font-size:55px;border-radius: 25px;font-weight: bold;">
                             <b>
-                                <center>{{ $winNumber }}</center>
+                                <center>{{ is_int($winNumber) ? sprintf("%02d", $winNumber) : $winNumber; }}</center>
                             </b>
                         </font>
                     </table>
@@ -1513,7 +1513,7 @@
                                         </td>
                                         @foreach ($postTypes as $postType)
                                             <td style="background:#ffffff;">
-                                                <font size="4" class="fon">{{ $calender[$postType->id] }}
+                                                <font size="4" class="fon">{{ is_int($calender[$postType->id]) ? sprintf("%02d",$calender[$postType->id]) : $calender[$postType->id] }}
                                                 </font>
                                             </td>
                                         @endforeach
@@ -1531,10 +1531,4 @@
                     border-radius: 18px;
                 }
             </style>
-
-            <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
-                integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
-                data-cf-beacon='{"rayId":"8abbae45b9097740","version":"2024.7.0","r":1,"token":"1d16c510e6d74ee790a95ddc50455eb7","serverTiming":{"name":{"cfL4":true}}}'
-                crossorigin="anonymous"></script>
-
 </html>
