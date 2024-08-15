@@ -1461,39 +1461,30 @@
 
         <center>
             <div style="background-color: #101002;text-align: center;">
-                @if (count($winners) > 0)
-                    @foreach ($winners as $winner)
-                        <table border="2" width="100%">
-                            <font
-                                style="color:rgb(255, 217, 0); text-shadow: 1px 1px rgb(255, 0, 0);font-size:50px;border-radius: 25px;font-weight: bold;">
-                                <b>
-                                    <center>{{ $winner->postType->name }} ({{$winner->postType->schedule_time}})</center>
-                                </b>
-                            </font>
-                            <font
-                                style="color:rgb(208, 8, 18); text-shadow: 1px 1px rgb(255, 221, 0);font-size:55px;border-radius: 25px;font-weight: bold;">
-                                <b>
-                                    <center>{{ $winner->number }}</center>
-                                </b>
-                            </font>
-                        </table>
-                    @endforeach
-                @else
+                @foreach ($postTypes as $postType)
+                    <?php $winNumber = 'WAIT...'; ?>
+                    @if (count($winners) > 0)
+                        @foreach ($winners as $winner)
+                            @if ($winner->postType->id === $postType->id)
+                                <?php $winNumber = $winner->number; ?>
+                            @endif
+                        @endforeach
+                    @endif
                     <table border="2" width="100%">
                         <font
                             style="color:rgb(255, 217, 0); text-shadow: 1px 1px rgb(255, 0, 0);font-size:50px;border-radius: 25px;font-weight: bold;">
                             <b>
-                                <center>UK SUPER (08:30PM)</center>
+                                <center>{{ $postType->name }} ({{ $postType->schedule_time }})</center>
                             </b>
                         </font>
                         <font
                             style="color:rgb(208, 8, 18); text-shadow: 1px 1px rgb(255, 221, 0);font-size:55px;border-radius: 25px;font-weight: bold;">
                             <b>
-                                <center>WAIT...</center>
+                                <center>{{ $winNumber }}</center>
                             </b>
                         </font>
                     </table>
-                @endif
+                @endforeach
             </div>
             <input id="f5" id="Refresh" name="Refresh Result" value="Result Refresh" type="submit"
                 onclick="window.location.reload()">
@@ -1501,13 +1492,14 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashed">
                     <tr>
                         <td align="left" valign="top">
-                            <table width="100%" class="rtable" style="border:1px thin; text-align:center"
-                                cellpadding="0" cellspacing="0" border="1" align="center">
+                            <table width="100%" class="rtable"
+                                style="border:1px thin; text-align:center; margin-top:20px" cellpadding="0"
+                                cellspacing="0" border="1" align="center">
                                 <tr>
-                                    <td widht="10%" style="background-color:#c5e31b;"><strong
+                                    <td width="10%" style="background-color:#c5e31b;"><strong
                                             class="fon">Date</strong></td>
                                     @foreach ($postTypes as $postType)
-                                        <td width="50%"
+                                        <td width="10%" height="50"
                                             style=" border-color: #000; background-color: #c5e31b; color: #a90f0f; font-size: 15px; font-weight: bold;">
                                             {{ $postType->name }} ({{ $postType->schedule_time }})</td>
                                     @endforeach
@@ -1520,9 +1512,10 @@
                                                 style="font-size:18px; font-weight:bold;">{{ $key }}</span>
                                         </td>
                                         @foreach ($postTypes as $postType)
-                                        <td style="background:#ffffff;">
-                                            <font size="4" class="fon">{{ $calender[$postType->id] }}</font>
-                                        </td>
+                                            <td style="background:#ffffff;">
+                                                <font size="4" class="fon">{{ $calender[$postType->id] }}
+                                                </font>
+                                            </td>
                                         @endforeach
                                     <tr>
                                 @endforeach
