@@ -59,8 +59,8 @@
                                                                             <label for="exampleInputDate">Date</label>
                                                                             <input type="date" name="date"
                                                                                 class="form-control" id="exampleInputDate"
-                                                                                min="@php echo Date('Y-m-d'); @endphp"
-                                                                                max="@php echo Date('Y-m-d') @endphp"
+                                                                                min="@php echo Date('Y-m-d', strtotime(' -1 day')) @endphp"
+                                                                                max="@php echo Date('Y-m-d', strtotime(' +1 day')) @endphp"
                                                                                 value="@php echo Date('Y-m-d'); @endphp"
                                                                                 placeholder="Select Date" required>
                                                                         </div>

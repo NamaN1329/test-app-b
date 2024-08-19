@@ -24,7 +24,7 @@ class WinnerStoreRequest extends FormRequest
     {
         return [
             "post_type" => ["required", "integer", "exists:post_types,id"],
-            "date" => ["required", "date", "date_equals:today"],
+            "date" => ["required", "date","after_or_equal:yesterday", "before_or_equal:tomorrow"],
             "number" => ["required", "integer", "between:1,100"],
         ];
     }
